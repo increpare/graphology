@@ -18,6 +18,7 @@ function reOffset(){
 	cw=canvas.width;
 	ch=canvas.height;
 }
+var lösungen=0;
 var offsetX,offsetY;
 reOffset();
 window["onscroll"]=function(e){ reOffset(); }
@@ -53,6 +54,7 @@ for (var i=0;i<16;i++){
 	representativen.push("");
 }
 
+
 var raster_b=10;
 var raster_h=22;
 var verborgene_zeilen=4;
@@ -67,260 +69,6 @@ var zu_verarbeiten_Wort_freqs=[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],]
 var zu_verarbeiten_Wort_max_freq=-1;
 var in_wortliste=false;
 
-var buchstabenMasken = {
-		"A": [
-			[1,1,1],
-			[1,0,1],
-			[1,1,1],
-			[1,0,1],
-			[1,0,1]
-		],
-		"B": [
-			[1,0,0],
-			[1,0,0],
-			[1,1,1],
-			[1,0,1],
-			[1,1,1]
-		],
-		"C": [
-			[1,1,1],
-			[1,0,0],
-			[1,0,0],
-			[1,0,0],
-			[1,1,1]
-		],
-		"D": [
-			[0,0,1],
-			[0,0,1],
-			[1,1,1],
-			[1,0,1],
-			[1,1,1]
-		],
-		"E": [
-			[1,1,1],
-			[1,0,0],
-			[1,1,1],
-			[1,0,0],
-			[1,1,1]
-		],
-		"F": [
-			[1,1,1],
-			[1,0,0],
-			[1,1,1],
-			[1,0,0],
-			[1,0,0]
-		],
-		"G": [
-			[1,1,1],
-			[1,0,0],
-			[1,0,1],
-			[1,0,1],
-			[1,1,1]
-		],
-		"H": [
-			[1,0,1],
-			[1,0,1],
-			[1,1,1],
-			[1,0,1],
-			[1,0,1]
-		],
-		"I": [
-			[1,1,1],
-			[0,1,0],
-			[0,1,0],
-			[0,1,0],
-			[1,1,1]
-		],
-		"J": [
-			[0,1,1],
-			[0,0,1],
-			[0,0,1],
-			[1,0,1],
-			[1,1,1]
-		],
-		"K": [
-			[1,0,0],
-			[1,0,0],
-			[1,0,1],
-			[1,1,0],
-			[1,0,1]
-		],
-		"L": [
-			[1,0,0],
-			[1,0,0],
-			[1,0,0],
-			[1,0,0],
-			[1,1,1]
-		],
-		"M": [
-			[1,0,1],
-			[1,1,1],
-			[1,0,1],
-			[1,0,1],
-			[1,0,1]
-		],
-		"N": [
-			[1,0,1],
-			[1,1,1],
-			[1,1,1],
-			[1,1,1],
-			[1,0,1]
-		],
-		"O": [
-			[1,1,1],
-			[1,0,1],
-			[1,0,1],
-			[1,0,1],
-			[1,1,1]
-		],
-		"P": [
-			[1,1,0],
-			[1,0,1],
-			[1,1,0],
-			[1,0,0],
-			[1,0,0]
-		],
-		"Q": [
-			[0,1,1],
-			[1,0,1],
-			[0,1,1],
-			[0,0,1],
-			[0,0,1]
-		],
-		"R": [
-			[1,1,0],
-			[1,0,1],
-			[1,1,0],
-			[1,0,1],
-			[1,0,1]
-		],
-		"S": [
-			[1,1,1],
-			[1,0,0],
-			[1,1,1],
-			[0,0,1],
-			[1,1,1]
-		],
-		"T": [
-			[1,1,1],
-			[0,1,0],
-			[0,1,0],
-			[0,1,0],
-			[0,1,0]
-		],
-		"U": [
-			[1,0,1],
-			[1,0,1],
-			[1,0,1],
-			[1,0,1],
-			[1,1,1]
-		],
-		"V": [
-			[1,0,1],
-			[1,0,1],
-			[1,0,1],
-			[1,0,1],
-			[0,1,0]
-		],
-		"W": [
-			[1,0,1],
-			[1,0,1],
-			[1,0,1],
-			[1,1,1],
-			[1,0,1]
-		],
-		"X": [
-			[1,0,1],
-			[1,0,1],
-			[0,1,0],
-			[1,0,1],
-			[1,0,1]
-		],
-		"Y": [
-			[1,0,1],
-			[1,0,1],
-			[0,1,0],
-			[0,1,0],
-			[0,1,0]
-		],
-		"Z": [
-			[1,1,1],
-			[0,0,1],
-			[0,1,0],
-			[1,0,0],
-			[1,1,1]
-		],
-		"0": [
-			[1,1,1],
-			[1,0,1],
-			[1,0,1],
-			[1,0,1],
-			[1,1,1]
-		],
-		"1": [
-			[0,1,0],
-			[1,1,0],
-			[0,1,0],
-			[0,1,0],
-			[1,1,1]
-		],
-		"2": [
-			[1,1,1],
-			[0,0,1],
-			[1,1,1],
-			[1,0,0],
-			[1,1,1]
-		],
-		"3": [
-			[1,1,1],
-			[0,0,1],
-			[0,1,1],
-			[0,0,1],
-			[1,1,1]
-		],
-		"4": [
-			[1,0,0],
-			[1,0,0],
-			[1,0,1],
-			[1,1,1],
-			[0,0,1]
-		],
-		"5": [
-			[1,1,1],
-			[1,0,0],
-			[1,1,1],
-			[0,0,1],
-			[1,1,1]
-		],
-		"6": [
-			[1,1,1],
-			[1,0,0],
-			[1,1,1],
-			[1,0,1],
-			[1,1,1]
-		],
-		"7": [
-			[1,1,1],
-			[0,0,1],
-			[0,0,1],
-			[0,0,1],
-			[0,0,1]
-		],
-		"8": [
-			[1,1,1],
-			[1,0,1],
-			[1,1,1],
-			[1,0,1],
-			[1,1,1]
-		],
-		"9": [
-			[1,1,1],
-			[1,0,1],
-			[1,1,1],
-			[0,0,1],
-			[0,0,1]
-		],
-	};
 
 var buchstaben_alle=["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"];
 
@@ -471,7 +219,7 @@ function genMuster(){
 genMuster();
 
 var image_x_y=[
-// ["taste_gedrückt","a",14,16,82,11],
+// ["taste_gedrueckt","a",14,16,82,11],
 // ["btn_unten_en","btn_unten_de",14,175,82,11],
 // ["btn_links_en","btn_links_de",2,28,11,146],
 // ["btn_rechts_en","btn_rechts_de",97,28,11,146],
@@ -480,7 +228,7 @@ var image_x_y=[
 // ["btn_stumm_gedrückt","btn_stumm_gedrückt",137,175,14,11],
 ];
 
-var reihe_x_beginn=[7,9,12];
+var reihe_x_beginn=[5,5+2,5+5];
 
 for (var j=0;j<tastaturReihenfolge.length;j++){
 	var reihe=tastaturReihenfolge[j];
@@ -488,12 +236,12 @@ for (var j=0;j<tastaturReihenfolge.length;j++){
 		var c = reihe[i];
 		
 		var x=reihe_x_beginn[j]+8*i;
-		var y = 40+10*j;
-		image_x_y.push(["taste_gedrückt",buchstabenBilder_hell[c],x,y,x,y,7,9]);
+		var y = 19+10*j;
+		image_x_y.push(["taste_gedrueckt",buchstabenBilder_hell[c],x,y,x,y,7,9]);
 	}
 }
 
-image_x_y.push(["enter_gedrücky",null,68,50,81,50,7,19,68,60,13,9])
+image_x_y.push(["enter_gedruecky",null,68-2,50-5-16,81-2,50-5-16,7,19,68-2,60-5-16,13,9])
 
 function druckZeichenfolge(x,y,s,helligkeit){
 	var ar = buchstabenBilder_dunkel;
@@ -812,9 +560,7 @@ async function prüfZeilen(){
 		redraw();		
 		//kleine pause
 
-		if (!stumm){
-			playSound(6532707);
-		}
+
 		await sleep(50);
 		//fallen lassen
 
@@ -950,7 +696,6 @@ soff=0;
 	wähleNeuesStück();
 
 	
-	playSound(4159307);
 
 	zustand=[];
 	for (var j=0;j<raster_h;j++){
@@ -1038,42 +783,48 @@ function redraw(){
 	// ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	ctx.drawImage(images["bg"], 0, 0);	
+	if (lösungen===0){
 
-	druckZeichenfolge(3,2,"Letter Science Research Workbench",0);
-	
-	druckZeichenfolge(5,12,"Enter Word",1);
-	druckZeichenfolge(98,12,"Word Analysis",1);
-	
-	druckZeichenfolge(5,77,"Representatives",1);
-	
-
-	if (zu_verarbeiten_Wort.length>0){
-		if (wörter.indexOf(zu_verarbeiten_Wort)>=0){
-			druckZeichenfolge(97,67,"Valid English word",2);
-		} else {
-			druckZeichenfolge(97,67,"Invalid English word",0);
-		}
+	}else if (lösungen<16){
+		var pc=lösungen/16;
+		var m_y=25/2;
+		ctx.drawImage(images["kunst_dim"], 0,0,79,25,6, 55+Math.round(m_y-m_y*pc),79,Math.round(25*pc));	
+	} else {
+		ctx.drawImage(images["kunst"], 0,0,79,25,6, 55,79,25);			
 	}
+
+	
+	
+	// druckZeichenfolge(5,77,"Representatives",1);
+	
+
+	// if (zu_verarbeiten_Wort.length>0){
+	// 	if (wörter.indexOf(zu_verarbeiten_Wort)>=0){
+	// 		druckZeichenfolge(97,67,"Valid English word",2);
+	// 	} else {
+	// 		druckZeichenfolge(97,67,"Invalid English word",0);
+	// 	}
+	// }
 
 	for (var i=0;i<eingabeWort.length;i++){
 		var c = eingabeWort[i];
 		// buchstabenBilder_hell[c].imageSmoothingEnabled=false;
-		ctx.drawImage(buchstabenBilder_hell[c],0,0,3,5,17+9*i,24,6,10);
+		ctx.drawImage(buchstabenBilder_hell[c],0,0,3,5,34+9*i,6,6,10);
 	}
 
 
 	for (var i=0;i<zu_verarbeiten_Wort.length;i++){
 		var c = zu_verarbeiten_Wort[i];
 		// buchstabenBilder_hell[c].imageSmoothingEnabled=false;
-		ctx.drawImage(buchstabenBilder[c],0,0,3,5,115+7*i,21,6,10);
+		ctx.drawImage(buchstabenBilder[c],0,0,3,5,124+7*i,5,6,10);
 	}
 
 	for (var i=0;i<16;i++){
 		muster=buchstabenBilder_muster[i];
 		var cx=i%4;
 		var cy=Math.floor(i/4)%4;
-		var x=97+cy*22;
-		var y=35+8*cx;
+		var x=92+cy*22;
+		var y=19+8*cx;
 		ctx.drawImage(muster,x,y);
 
 		var freqs=zu_verarbeiten_Wort_freqs[i];
@@ -1092,7 +843,7 @@ function redraw(){
 				var m_x=freqs[j][1];
 				var m_y=freqs[j][2];
 				
-				ctx.drawImage(buchstabenBilder_muster_eng[i],0,0,2,2,115+7*bs+2*m_x,21+2*m_y,4,4);
+				ctx.drawImage(buchstabenBilder_muster_eng[i],0,0,2,2,124+7*bs+2*m_x,5+2*m_y,4,4);
 			}
 		}
 
@@ -1106,8 +857,8 @@ function redraw(){
 		}
 		
 
-		x=4+cy*38;
-		y=85+cx*8;
+		x=92+cy*22;
+		y=53+cx*8;
 		ctx.drawImage(muster,x,y);
 
 
@@ -1201,7 +952,7 @@ function redraw(){
 	// }
 	for(var i=0;i<26;i++){
 		var dat = image_x_y[i];
-		//["taste_gedrückt",buchstabenBilder_hell[c],x,y,7,9]
+		//["taste_gedrueckt",buchstabenBilder_hell[c],x,y,7,9]
 		
 		var bg_gedrückt=dat[0];
 		var bg_buchstabe=dat[1];
@@ -1235,8 +986,10 @@ function redraw(){
 
 var image_names=[
 	"bg",
-	"taste_gedrückt",
-	"enter_gedrücky",
+	"taste_gedrueckt",
+	"enter_gedruecky",
+	"kunst",
+	"kunst_dim"
 	];
 
 var stumm=false;
@@ -1373,13 +1126,8 @@ async function doMove(dx,dy){
 
 		wähleNeuesStück();
 
-		if(!stumm){
-			playSound(4159307);
-		}
 	} else {
-		if(!stumm){
-			playSound(44213107);
-		}
+
 	}
 
 
@@ -1496,9 +1244,7 @@ async function doMove(dx,dy){
 			// }
 		} else {
 
-			if(!stumm){
-				playSound(67641907);
-			}
+
 		}
 
 	}
@@ -1569,7 +1315,7 @@ async function doPress(i){
 
 	pressed[i]=true;
 
-	if (i<26 && eingabeWort.length<7){
+	if (i<26 && eingabeWort.length<3){
 		eingabeWort=eingabeWort+buchstaben_folge[i];
 	} else if (i===26){
 		if (eingabeWort.length>0){
@@ -1580,12 +1326,23 @@ async function doPress(i){
 			var werts=zu_verarbeiten_Wort_freqs.map(l=>l.length);
 			zu_verarbeiten_Wort_max_freq = indexVonEinmaligeMaxzahl(werts);
 			
-			in_wortliste=wörter.indexOf(zu_verarbeiten_Wort)>=0;
+			in_wortliste=true;//wörter.indexOf(zu_verarbeiten_Wort)>=0;
 
 			if (in_wortliste && zu_verarbeiten_Wort_max_freq>=0 && representativen[zu_verarbeiten_Wort_max_freq]===""){
 				representativen[zu_verarbeiten_Wort_max_freq]=zu_verarbeiten_Wort;
+				lösungen++;
+				if (lösungen===16){
+					playSound(54041103)
+				} else {
+					playSound(39013100)
+				}
+			} else {
+				playSound(39009302);			
 			}
 			eingabeWort="";
+		} else {
+			playSound(39009302);	
+			eingabeWort="";			
 		}
 	}
 	
@@ -1871,7 +1628,7 @@ function indexVonEinmaligeMaxzahl(arr){
 
     var max = arr[0];
     var maxIndex = 0;
-    var maxcount=0;
+    var maxcount=1;
 
     for (var i = 1; i < arr.length; i++) {
         if (arr[i] > max) {
@@ -1945,52 +1702,53 @@ if (Number.isNaN(highscore)){
 
 resetGame();
 
-var liste=[];
-for (var i=0;i<16;i++){
-	liste.push([]);
-}
-for (var i=0;i<wörter.length;i++){
-	var wort=wörter[i];
-	var freqs = wortFreqs(wort);
-	var werts=freqs.map(l=>l.length);
-	var max_i=indexVonEinmaligeMaxzahl(werts);
-	if (max_i>=0){
-		liste[max_i].push(wort);
-	}
-}
+// var liste=[];
+// for (var i=0;i<16;i++){
+// 	liste.push([]);
+// }
+// for (var i=0;i<wörter.length;i++){
+// 	var wort=wörter[i];
+// 	var freqs = wortFreqs(wort);
+// 	var werts=freqs.map(l=>l.length);
+// 	var max_i=indexVonEinmaligeMaxzahl(werts);
+// 	if (max_i>=0){
+// 		liste[max_i].push(wort);
+// 	}
+// }
 
-for (var i=0;i<16;i++){
-	liste[i].sort(function(a, b){
-	  // ASC  -> a.length - b.length
-	  // DESC -> b.length - a.length
-	  return a.length - b.length;
-	});
-	console.log(i+" "+liste[i][0])
-}
+// for (var i=0;i<16;i++){
+// 	liste[i].sort(function(a, b){
+// 	  // ASC  -> a.length - b.length
+// 	  // DESC -> b.length - a.length
+// 	  return a.length - b.length;
+// 	});
+// 	console.log(i+" "+liste[i][0])
+// }
 
 
-var liste=[];
-for (var i=0;i<16;i++){
-	liste.push([]);
-}
-for (var i=0;i<buchstaben.length;i++){
-	var wort=buchstaben[i];
-	var freqs = wortFreqs(wort);
-	var werts=freqs.map(l=>l.length);
-	var max_i=indexVonEinmaligeMaxzahl(werts);
-	if (max_i>=0){
-		liste[max_i].push(wort);
-	}
-}
+// var liste=[];
+// for (var i=0;i<16;i++){
+// 	liste.push([]);
+// }
+// for (var i=0;i<buchstaben.length;i++){
+// 	var wort=buchstaben[i];
+// 	var freqs = wortFreqs(wort);
+// 	var werts=freqs.map(l=>l.length);
+// 	var max_i=indexVonEinmaligeMaxzahl(werts);
+// 	if (max_i>=0){
+// 		liste[max_i].push(wort);
+// 	}
+// }
 
-console.log(" ")
-for (var i=0;i<16;i++){
-	liste[i].sort(function(a, b){
-	  // ASC  -> a.length - b.length
-	  // DESC -> b.length - a.length
-	  return a.length - b.length;
-	});
-	console.log(i+" "+liste[i])
-}
+// console.log(" ")
+// for (var i=0;i<16;i++){
+// 	liste[i].sort(function(a, b){
+// 	  // ASC  -> a.length - b.length
+// 	  // DESC -> b.length - a.length
+// 	  return a.length - b.length;
+// 	});
+// 	console.log(i+" "+liste[i])
+// }
+
 
 //lass Test laufen
